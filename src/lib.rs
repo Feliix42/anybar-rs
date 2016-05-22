@@ -49,9 +49,19 @@ impl Anybar {
         parsed
     }
 
+    fn socket(ip: &str, port: u16) -> net::UdpSocket {
+        match net::UdpSocket::bind((ip, port)) {
+            Ok(sock) => sock,
+            Err(err) => panic!("Could not bind: {}", err),
+        }
+    }
+
     pub fn set_color(&self, color: Color) {
         let message = Anybar::parse_color(color);
-        // TODO
+
+        let socket = Anybar::socket("127.0.0.1", 0);
+        let _ = socket.send_to(&message, ("127.0.0.1", self.port));
+        drop(socket);
     }
 }
 
