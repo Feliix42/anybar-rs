@@ -1,5 +1,30 @@
+//! This is a small crate for the [AnyBar](https://github.com/tonsky/AnyBar).
+//!
+//! # Examples
+//! The functioning of this crate is pretty simple. These are the most use cases:
+//!
+//! ## Using the default port
+//! ```
+//! # use anybar::*;
+//! // create a new AnyBar instance connected to the default port
+//! let bar = Anybar::default();
+//!
+//! // set the color
+//! bar.set_color(Color::Red);
+//! ```
+//!
+//! ## Using a separate port
+//! ```
+//! # use anybar::*;
+//! // Anybar::new() takes the Anybar port as parameter
+//! let custom_bar = Anybar::new(1708);
+//! custom_bar.set_color(Color::Exclamation);
+//! ```
+//!
+
 use std::net;
 
+/// The Anybar handle.
 pub struct Anybar {
     /// The UDP Port the Anybar is connected to
     pub port: u16,
@@ -7,17 +32,29 @@ pub struct Anybar {
     pub color: Option<Color>,
 }
 
+/// The different colors supported by AnyBar.
 pub enum Color {
+    /// White dot
     White,
+    /// Red dot
     Red,
+    /// Orange dot
     Orange,
+    /// Yellow dot
     Yellow,
+    /// Green dot
     Green,
+    /// Cyan dot
     Cyan,
+    /// Blue dot
     Blue,
+    /// Purple dot
     Purple,
+    /// Black dot; Has a white frame in _dark_ mode
     Black,
+    /// Question mark
     Question,
+    /// White exclamation mark on red ground
     Exclamation,
 }
 
@@ -59,6 +96,7 @@ impl Anybar {
         }
     }
 
+    /// Set a new color.
     pub fn set_color(&self, color: Color) {
         let message = Anybar::parse_color(color);
 
@@ -68,6 +106,13 @@ impl Anybar {
     }
 }
 
+/// Instanciates the default AnyBar, connected to the Port `1738`.
+///
+/// ```
+/// # use anybar::*;
+/// let bar = Anybar::default();
+/// assert_eq!(bar.port, 1738);
+/// ```
 impl Default for Anybar {
     fn default() -> Anybar {
         Anybar{port:1738, color:None}
