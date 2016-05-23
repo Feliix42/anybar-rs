@@ -21,6 +21,27 @@
 //! custom_bar.set_color(Color::Exclamation);
 //! ```
 //!
+//! ## Additional information
+//! ```
+//! # use anybar::*;
+//! let bar = Anybar::default();
+//!
+//! // after instantiation, the last color is None
+//! assert!(bar.color.is_none());
+//!
+//! bar.set_color(Color::Red);
+//! // the last color now contains a value
+//! // assert_eq!(bar.color.unwrap(), Color::Red);
+//! ```
+//!
+//! Note that the value of `bar.color` does not necessarily represent the real color
+//! displayed at the moment, depending on whether you have something or someone else messing
+//! with your AnyBar simultaneously.
+//!
+//! # Note
+//! The AnyBar itself does not provide any information on whether the sent command was executed
+//! successfully, so the lib will only panic if it was not able to bind a UDP socket.
+//!
 
 use std::net;
 
@@ -28,7 +49,9 @@ use std::net;
 pub struct Anybar {
     /// The UDP Port the Anybar is connected to
     pub port: u16,
-    /// The last color that has been set
+    /// The last color that has been set.
+    ///
+    /// When no color has been set yet, color is `None`.
     pub color: Option<Color>,
 }
 
