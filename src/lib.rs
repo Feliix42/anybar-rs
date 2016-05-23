@@ -22,6 +22,9 @@ pub enum Color {
 }
 
 impl Anybar {
+    /// Create a new Anybar instance, connected to the given UDP port.
+    ///
+    /// `port` may be any port between 0 and 6553.
     pub fn new(port: u16) -> Anybar {
         //TODO check if port is valid
         Anybar{port:port, color:None}
