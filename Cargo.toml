@@ -9,7 +9,7 @@ homepage = "https://github.com/Feliix42/anybar-rs"
 repository = "https://github.com/Feliix42/anybar-rs"
 
 readme = "README.md"
-keywords = ["anybar", "osx", "menu bar"]
+keywords = ["anybar", "osx", "menubar"]
 license = "MIT"
 
 [dependencies]
