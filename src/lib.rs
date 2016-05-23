@@ -85,8 +85,22 @@ impl Anybar {
     /// Create a new Anybar instance, connected to the given UDP port.
     ///
     /// `port` may be any port between 0 and 6553.
+    ///
+    /// # Panics
+    /// Panics if the port has a non-valid value outside of the range between 0 and 6553.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// # use anybar::*;
+    /// let custom_bar = Anybar::new(1708);
+    ///
+    /// assert_eq!(custom_bar.port, 1708);
+    /// ```
     pub fn new(port: u16) -> Anybar {
-        //TODO check if port is valid
+        if port > 6553 {
+            panic!("The port {} is not between 0 and 6553!", port);
+        }
         Anybar{port:port, color:None}
     }
 
