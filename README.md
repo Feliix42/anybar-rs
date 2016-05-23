@@ -6,8 +6,33 @@ This is a small Rust Crate for [AnyBar](https://github.com/tonsky/AnyBar). (WIP)
 
 ## Roadmap
 
-- [ ] Documentation
+- [x] Documentation
 - [ ] Support `quit` (even though it's experimental)
+
+## Examples
+
+### Connect using the default port
+```rust
+use anybar::*;
+
+// create a new AnyBar instance connected to the default port
+let bar = Anybar::default();
+
+// set the color
+bar.set_color(Color::Red);
+```
+
+### Connect using a separate port
+```rust
+use anybar::*;
+
+// Anybar::new() takes the AnyBar port as parameter
+let custom_bar = Anybar::new(1708);
+custom_bar.set_color(Color::Exclamation);
+```
+
+## Usage & Documentation
+Please check the [documentation](https://feliix42.github.io/anybar-rs/) for more examples and details on certain functions.
 
 ## License
 This work is licensed under the _MIT_ license. See `LICENSE` for more information.

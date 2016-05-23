@@ -134,6 +134,9 @@ impl Anybar {
     }
 
     /// Set a new color.
+    ///
+    /// # Panics
+    /// Panics if the UDP socket can not be bound.
     pub fn set_color(&self, color: Color) {
         let message = Anybar::parse_color(color);
 

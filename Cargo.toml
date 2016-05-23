@@ -3,4 +3,13 @@ name = "anybar"
 version = "0.1.0"
 authors = ["Felix Wittwer <dev@felixwittwer.de>"]
 
+description = "A Rust crate to interact with Anybar."
+documentation = "https://feliix42.github.io/anybar-rs/"
+homepage = "https://github.com/Feliix42/anybar-rs"
+repository = "https://github.com/Feliix42/anybar-rs"
+
+readme = "README.md"
+keywords = ["anybar", "osx", "menu bar"]
+license = "MIT"
+
 [dependencies]
