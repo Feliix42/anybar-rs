@@ -7,7 +7,7 @@
 //! ```
 //! # use anybar::*;
 //! // create a new AnyBar instance connected to the default port
-//! let bar = Anybar::default();
+//! let mut bar = Anybar::default();
 //!
 //! // set the color
 //! bar.set_color(Color::Red);
@@ -17,14 +17,14 @@
 //! ```
 //! # use anybar::*;
 //! // Anybar::new() takes the Anybar port as parameter
-//! let custom_bar = Anybar::new(1708);
+//! let mut custom_bar = Anybar::new(1708);
 //! custom_bar.set_color(Color::Exclamation);
 //! ```
 //!
 //! ## Additional information
 //! ```
 //! # use anybar::*;
-//! let bar = Anybar::default();
+//! let mut bar = Anybar::default();
 //!
 //! // after instantiation, the last color is None
 //! assert!(bar.color.is_none());
@@ -104,9 +104,9 @@ impl Anybar {
         Anybar{port:port, color:None}
     }
 
-    fn parse_color(color: Color) -> Vec<u8> {
+    fn parse_color(color: &Color) -> Vec<u8> {
         use Color::*;
-        let col = match color {
+        let col = match *color {
             White       => "white",
             Red         => "red",
             Orange      => "orange",
@@ -137,12 +137,14 @@ impl Anybar {
     ///
     /// # Panics
     /// Panics if the UDP socket can not be bound.
-    pub fn set_color(&self, color: Color) {
-        let message = Anybar::parse_color(color);
+    pub fn set_color(&mut self, color: Color) {
+        let message = Anybar::parse_color(&color);
 
         let socket = Anybar::socket("127.0.0.1", 0);
         let _ = socket.send_to(&message, ("127.0.0.1", self.port));
         drop(socket);
+
+        self.color = Some(color);
     }
 }
 

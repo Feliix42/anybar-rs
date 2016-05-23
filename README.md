@@ -16,7 +16,7 @@ This is a small Rust Crate for [AnyBar](https://github.com/tonsky/AnyBar). (WIP)
 use anybar::*;
 
 // create a new AnyBar instance connected to the default port
-let bar = Anybar::default();
+let mut bar = Anybar::default();
 
 // set the color
 bar.set_color(Color::Red);
@@ -27,7 +27,7 @@ bar.set_color(Color::Red);
 use anybar::*;
 
 // Anybar::new() takes the AnyBar port as parameter
-let custom_bar = Anybar::new(1708);
+let mut custom_bar = Anybar::new(1708);
 custom_bar.set_color(Color::Exclamation);
 ```
 

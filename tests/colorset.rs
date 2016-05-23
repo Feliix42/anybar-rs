@@ -7,7 +7,7 @@ mod colorset {
     // Integration test to test functionality
     #[test]
     fn set_color() {
-        let anyb = Anybar::default();
+        let mut anyb = Anybar::default();
 
         anyb.set_color(Color::White);
     }
