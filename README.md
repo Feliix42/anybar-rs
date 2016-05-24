@@ -1,13 +1,8 @@
 # anybar-rs
 
-This is a small Rust Crate for [AnyBar](https://github.com/tonsky/AnyBar). (WIP)
+This is a small Rust Crate for [AnyBar](https://github.com/tonsky/AnyBar).
 
 [![Build Status](https://travis-ci.org/Feliix42/anybar-rs.svg?branch=master)](https://travis-ci.org/Feliix42/anybar-rs)
-
-## Roadmap
-
-- [x] Documentation
-- [x] Support `quit` (even though it's experimental)
 
 ## Examples
 
