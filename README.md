@@ -7,7 +7,7 @@ This is a small Rust Crate for [AnyBar](https://github.com/tonsky/AnyBar). (WIP)
 ## Roadmap
 
 - [x] Documentation
-- [ ] Support `quit` (even though it's experimental)
+- [x] Support `quit` (even though it's experimental)
 
 ## Examples
 

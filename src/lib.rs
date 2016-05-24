@@ -146,6 +146,36 @@ impl Anybar {
 
         self.color = Some(color);
     }
+
+    /// Sends the quit signal to the Anybar and takes ownership of the object.
+    ///
+    /// _This is an experimental feature of AnyBar._ Since the AnyBar will quit during the
+    /// execution of this function, it takes the ownership of `self`,
+    /// which will be dropped when this function returns.
+    ///
+    /// # Panics
+    /// Panics if the UDP socket can not be bound.
+    ///
+    /// # Example
+    /// ```ignore
+    /// # use anybar::*;
+    /// let mut bar = Anybar::default();
+    ///
+    /// // do stuff...
+    ///
+    /// bar.quit();
+    ///
+    /// bar.set_color(Color::White);  // this won't work, bar has been moved
+    /// ```
+    pub fn quit(self) {
+        let mut message: Vec<u8> = Vec::new();
+        message.extend("quit".as_bytes()
+                             .iter());
+
+        let socket = Anybar::socket("127.0.0.1", 0);
+        let _ = socket.send_to(&message, ("127.0.0.1", self.port));
+        drop(socket);
+    }
 }
 
 /// Instanciates the default AnyBar, connected to the Port `1738`.

@@ -1,0 +1,12 @@
+extern crate anybar;
+
+#[cfg(test)]
+mod tests {
+    use anybar::*;
+
+    #[test]
+    fn quit_anybar() {
+        let mut bar = Anybar::new(1708);
+        bar.quit();
+    }
+}
