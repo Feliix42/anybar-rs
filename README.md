@@ -3,6 +3,7 @@
 This is a small Rust Crate for [AnyBar](https://github.com/tonsky/AnyBar).
 
 [![Build Status](https://travis-ci.org/Feliix42/anybar-rs.svg?branch=master)](https://travis-ci.org/Feliix42/anybar-rs)
+[![Crates.io](https://img.shields.io/crates/v/anybar.svg)](https://crates.io/crates/anybar)
 
 ## Examples
 
