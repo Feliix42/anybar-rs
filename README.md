@@ -15,7 +15,7 @@ use anybar::*;
 let mut bar = Anybar::default();
 
 // set the color
-bar.set_color(Color::Red);
+bar.set_color(Color::Red).unwrap();
 ```
 
 ### Connect using a separate port
@@ -24,7 +24,7 @@ use anybar::*;
 
 // Anybar::new() takes the AnyBar port as parameter
 let mut custom_bar = Anybar::new(1708);
-custom_bar.set_color(Color::Exclamation);
+custom_bar.set_color(Color::Exclamation).unwrap();
 ```
 
 ## Usage & Documentation

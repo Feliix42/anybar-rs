@@ -40,7 +40,7 @@
 //!
 //! # Note
 //! The AnyBar itself does not provide any information on whether the sent command was executed
-//! successfully, so the lib will only panic if it was not able to bind a UDP socket.
+//! successfully, so the lib will only return an error if it was not able to bind a UDP socket.
 //!
 
 use std::net;
@@ -128,16 +128,11 @@ impl Anybar {
 
     fn socket(ip: &str, port: u16) -> Result<net::UdpSocket, std::io::Error> {
         net::UdpSocket::bind((ip, port))
-        /* match net::UdpSocket::bind((ip, port)) {
-            Ok(sock) => sock,
-            Err(err) => panic!("Could not bind: {}", err),
-        } */
     }
 
     /// Set a new color.
     ///
-    /// # Panics - TODO
-    /// Panics if the UDP socket can not be bound.
+    /// The function returns a `ResultType` which will contain a `std::io::Error` when the UDP socket can't be bound.
     pub fn set_color(&mut self, color: Color) -> Result<(), std::io::Error> {
         let message = Anybar::parse_color(&color);
 
@@ -159,8 +154,7 @@ impl Anybar {
     /// execution of this function, it takes the ownership of `self`,
     /// which will be dropped when this function returns.
     ///
-    /// # Panics - TODO
-    /// Panics if the UDP socket can not be bound.
+    /// The function returns a `ResultType` which will contain a `std::io::Error` when the UDP socket can't be bound.
     ///
     /// # Example
     /// ```ignore
