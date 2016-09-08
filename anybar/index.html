@@ -11,6 +11,7 @@
 
     <link rel="stylesheet" type="text/css" href="../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../main.css">
+    
 
     
     
@@ -43,10 +44,10 @@
 
     <section id='main' class="content mod">
 <h1 class='fqn'><span class='in-band'>Crate <a class='mod' href=''>anybar</a></span><span class='out-of-band'><span id='render-detail'>
-            <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
-                [<span class='inner'>&#x2212;</span>]
-            </a>
-        </span><a id='src-0' class='srclink' href='../src/anybar/src/lib.rs.html#1-192' title='goto source code'>[src]</a></span></h1>
+                   <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                       [<span class='inner'>&#x2212;</span>]
+                   </a>
+               </span><a id='src-0' class='srclink' href='../src/anybar/src/lib.rs.html#1-197' title='goto source code'>[src]</a></span></h1>
 <div class='docblock'><p>This is a small crate for the <a href="https://github.com/tonsky/AnyBar">AnyBar</a>.</p>
 
 <h1 id='examples' class='section-header'><a href='#examples'>Examples</a></h1>
@@ -58,13 +59,13 @@
 <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>bar</span> <span class='op'>=</span> <span class='ident'>Anybar</span>::<span class='ident'>default</span>();
 
 <span class='comment'>// set the color</span>
-<span class='ident'>bar</span>.<span class='ident'>set_color</span>(<span class='ident'>Color</span>::<span class='ident'>Red</span>);</pre>
+<span class='ident'>bar</span>.<span class='ident'>set_color</span>(<span class='ident'>Color</span>::<span class='ident'>Red</span>).<span class='ident'>unwrap</span>();</pre>
 
 <h2 id='using-a-separate-port' class='section-header'><a href='#using-a-separate-port'>Using a separate port</a></h2>
 <pre class='rust rust-example-rendered'>
 <span class='comment'>// Anybar::new() takes the Anybar port as parameter</span>
 <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>custom_bar</span> <span class='op'>=</span> <span class='ident'>Anybar</span>::<span class='ident'>new</span>(<span class='number'>1708</span>);
-<span class='ident'>custom_bar</span>.<span class='ident'>set_color</span>(<span class='ident'>Color</span>::<span class='ident'>Exclamation</span>);</pre>
+<span class='ident'>custom_bar</span>.<span class='ident'>set_color</span>(<span class='ident'>Color</span>::<span class='ident'>Exclamation</span>).<span class='ident'>unwrap</span>();</pre>
 
 <h2 id='additional-information' class='section-header'><a href='#additional-information'>Additional information</a></h2>
 <pre class='rust rust-example-rendered'>
@@ -73,7 +74,7 @@
 <span class='comment'>// after instantiation, the last color is None</span>
 <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>bar</span>.<span class='ident'>color</span>.<span class='ident'>is_none</span>());
 
-<span class='ident'>bar</span>.<span class='ident'>set_color</span>(<span class='ident'>Color</span>::<span class='ident'>Red</span>);
+<span class='ident'>bar</span>.<span class='ident'>set_color</span>(<span class='ident'>Color</span>::<span class='ident'>Red</span>).<span class='ident'>unwrap</span>();
 <span class='comment'>// the last color now contains a value</span>
 <span class='comment'>// assert_eq!(bar.color.unwrap(), Color::Red);</span></pre>
 
@@ -83,26 +84,24 @@ with your AnyBar simultaneously.</p>
 
 <h1 id='note' class='section-header'><a href='#note'>Note</a></h1>
 <p>The AnyBar itself does not provide any information on whether the sent command was executed
-successfully, so the lib will only panic if it was not able to bind a UDP socket.</p>
+successfully, so the lib will only return an error if it was not able to bind a UDP socket.</p>
 </div><h2 id='structs' class='section-header'><a href="#structs">Structs</a></h2>
 <table>
-                    <tr class=' module-item'>
-                        <td><a class='struct' href='struct.Anybar.html'
-                               title='anybar::Anybar'>Anybar</a></td>
-                        <td class='docblock short'>
-                             <p>The Anybar handle.</p>
-                        </td>
-                    </tr>
-                </table><h2 id='enums' class='section-header'><a href="#enums">Enums</a></h2>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.Anybar.html'
+                                  title='anybar::Anybar'>Anybar</a></td>
+                           <td class='docblock short'>
+                                <p>The Anybar handle.</p>
+                           </td>
+                       </tr></table><h2 id='enums' class='section-header'><a href="#enums">Enums</a></h2>
 <table>
-                    <tr class=' module-item'>
-                        <td><a class='enum' href='enum.Color.html'
-                               title='anybar::Color'>Color</a></td>
-                        <td class='docblock short'>
-                             <p>The different colors supported by AnyBar.</p>
-                        </td>
-                    </tr>
-                </table></section>
+                       <tr class=' module-item'>
+                           <td><a class='enum' href='enum.Color.html'
+                                  title='anybar::Color'>Color</a></td>
+                           <td class='docblock short'>
+                                <p>The different colors supported by AnyBar.</p>
+                           </td>
+                       </tr></table></section>
     <section id='search' class="content hidden"></section>
 
     <section class="footer"></section>
@@ -125,6 +124,8 @@ successfully, so the lib will only panic if it was not able to bind a UDP socket
                     <dd>Move down in search results</dd>
                     <dt>&#9166;</dt>
                     <dd>Go to active search result</dd>
+                    <dt>+</dt>
+                    <dd>Collapse/expand all sections</dd>
                 </dl>
             </div>
 

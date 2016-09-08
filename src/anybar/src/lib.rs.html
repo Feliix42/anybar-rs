@@ -11,6 +11,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../../../main.css">
+    
 
     
     
@@ -233,6 +234,11 @@
 <span id="190">190</span>
 <span id="191">191</span>
 <span id="192">192</span>
+<span id="193">193</span>
+<span id="194">194</span>
+<span id="195">195</span>
+<span id="196">196</span>
+<span id="197">197</span>
 </pre><pre class='rust '>
 <span class='doccomment'>//! This is a small crate for the [AnyBar](https://github.com/tonsky/AnyBar).</span>
 <span class='doccomment'>//!</span>
@@ -246,7 +252,7 @@
 <span class='doccomment'>//! let mut bar = Anybar::default();</span>
 <span class='doccomment'>//!</span>
 <span class='doccomment'>//! // set the color</span>
-<span class='doccomment'>//! bar.set_color(Color::Red);</span>
+<span class='doccomment'>//! bar.set_color(Color::Red).unwrap();</span>
 <span class='doccomment'>//! ```</span>
 <span class='doccomment'>//!</span>
 <span class='doccomment'>//! ## Using a separate port</span>
@@ -254,7 +260,7 @@
 <span class='doccomment'>//! # use anybar::*;</span>
 <span class='doccomment'>//! // Anybar::new() takes the Anybar port as parameter</span>
 <span class='doccomment'>//! let mut custom_bar = Anybar::new(1708);</span>
-<span class='doccomment'>//! custom_bar.set_color(Color::Exclamation);</span>
+<span class='doccomment'>//! custom_bar.set_color(Color::Exclamation).unwrap();</span>
 <span class='doccomment'>//! ```</span>
 <span class='doccomment'>//!</span>
 <span class='doccomment'>//! ## Additional information</span>
@@ -265,7 +271,7 @@
 <span class='doccomment'>//! // after instantiation, the last color is None</span>
 <span class='doccomment'>//! assert!(bar.color.is_none());</span>
 <span class='doccomment'>//!</span>
-<span class='doccomment'>//! bar.set_color(Color::Red);</span>
+<span class='doccomment'>//! bar.set_color(Color::Red).unwrap();</span>
 <span class='doccomment'>//! // the last color now contains a value</span>
 <span class='doccomment'>//! // assert_eq!(bar.color.unwrap(), Color::Red);</span>
 <span class='doccomment'>//! ```</span>
@@ -276,7 +282,7 @@
 <span class='doccomment'>//!</span>
 <span class='doccomment'>//! # Note</span>
 <span class='doccomment'>//! The AnyBar itself does not provide any information on whether the sent command was executed</span>
-<span class='doccomment'>//! successfully, so the lib will only panic if it was not able to bind a UDP socket.</span>
+<span class='doccomment'>//! successfully, so the lib will only return an error if it was not able to bind a UDP socket.</span>
 <span class='doccomment'>//!</span>
 
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>net</span>;
@@ -362,25 +368,26 @@
         <span class='ident'>parsed</span>
     }
 
-    <span class='kw'>fn</span> <span class='ident'>socket</span>(<span class='ident'>ip</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>, <span class='ident'>port</span>: <span class='ident'>u16</span>) <span class='op'>-&gt;</span> <span class='ident'>net</span>::<span class='ident'>UdpSocket</span> {
-        <span class='kw'>match</span> <span class='ident'>net</span>::<span class='ident'>UdpSocket</span>::<span class='ident'>bind</span>((<span class='ident'>ip</span>, <span class='ident'>port</span>)) {
-            <span class='prelude-val'>Ok</span>(<span class='ident'>sock</span>) <span class='op'>=&gt;</span> <span class='ident'>sock</span>,
-            <span class='prelude-val'>Err</span>(<span class='ident'>err</span>) <span class='op'>=&gt;</span> <span class='macro'>panic</span><span class='macro'>!</span>(<span class='string'>&quot;Could not bind: {}&quot;</span>, <span class='ident'>err</span>),
-        }
+    <span class='kw'>fn</span> <span class='ident'>socket</span>(<span class='ident'>ip</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>, <span class='ident'>port</span>: <span class='ident'>u16</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>net</span>::<span class='ident'>UdpSocket</span>, <span class='ident'>std</span>::<span class='ident'>io</span>::<span class='ident'>Error</span><span class='op'>&gt;</span> {
+        <span class='ident'>net</span>::<span class='ident'>UdpSocket</span>::<span class='ident'>bind</span>((<span class='ident'>ip</span>, <span class='ident'>port</span>))
     }
 
     <span class='doccomment'>/// Set a new color.</span>
     <span class='doccomment'>///</span>
-    <span class='doccomment'>/// # Panics</span>
-    <span class='doccomment'>/// Panics if the UDP socket can not be bound.</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>set_color</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>, <span class='ident'>color</span>: <span class='ident'>Color</span>) {
+    <span class='doccomment'>/// The function returns a `ResultType` which will contain a `std::io::Error` when the UDP socket can&#39;t be bound.</span>
+    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>set_color</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>, <span class='ident'>color</span>: <span class='ident'>Color</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span>(), <span class='ident'>std</span>::<span class='ident'>io</span>::<span class='ident'>Error</span><span class='op'>&gt;</span> {
         <span class='kw'>let</span> <span class='ident'>message</span> <span class='op'>=</span> <span class='ident'>Anybar</span>::<span class='ident'>parse_color</span>(<span class='kw-2'>&amp;</span><span class='ident'>color</span>);
 
-        <span class='kw'>let</span> <span class='ident'>socket</span> <span class='op'>=</span> <span class='ident'>Anybar</span>::<span class='ident'>socket</span>(<span class='string'>&quot;127.0.0.1&quot;</span>, <span class='number'>0</span>);
+        <span class='kw'>let</span> <span class='ident'>socket</span> <span class='op'>=</span> <span class='kw'>match</span> <span class='ident'>Anybar</span>::<span class='ident'>socket</span>(<span class='string'>&quot;127.0.0.1&quot;</span>, <span class='number'>0</span>) {
+            <span class='prelude-val'>Ok</span>(<span class='ident'>sock</span>) <span class='op'>=&gt;</span> <span class='ident'>sock</span>,
+            <span class='prelude-val'>Err</span>(<span class='ident'>e</span>)   <span class='op'>=&gt;</span> <span class='kw'>return</span> <span class='prelude-val'>Err</span>(<span class='ident'>e</span>)
+        };
+
         <span class='kw'>let</span> _ <span class='op'>=</span> <span class='ident'>socket</span>.<span class='ident'>send_to</span>(<span class='kw-2'>&amp;</span><span class='ident'>message</span>, (<span class='string'>&quot;127.0.0.1&quot;</span>, <span class='self'>self</span>.<span class='ident'>port</span>));
         <span class='ident'>drop</span>(<span class='ident'>socket</span>);
 
         <span class='self'>self</span>.<span class='ident'>color</span> <span class='op'>=</span> <span class='prelude-val'>Some</span>(<span class='ident'>color</span>);
+        <span class='prelude-val'>Ok</span>(())
     }
 
     <span class='doccomment'>/// Sends the quit signal to the Anybar and takes ownership of the object.</span>
@@ -389,8 +396,7 @@
     <span class='doccomment'>/// execution of this function, it takes the ownership of `self`,</span>
     <span class='doccomment'>/// which will be dropped when this function returns.</span>
     <span class='doccomment'>///</span>
-    <span class='doccomment'>/// # Panics</span>
-    <span class='doccomment'>/// Panics if the UDP socket can not be bound.</span>
+    <span class='doccomment'>/// The function returns a `ResultType` which will contain a `std::io::Error` when the UDP socket can&#39;t be bound.</span>
     <span class='doccomment'>///</span>
     <span class='doccomment'>/// # Example</span>
     <span class='doccomment'>/// ```ignore</span>
@@ -399,18 +405,23 @@
     <span class='doccomment'>///</span>
     <span class='doccomment'>/// // do stuff...</span>
     <span class='doccomment'>///</span>
-    <span class='doccomment'>/// bar.quit();</span>
+    <span class='doccomment'>/// bar.quit().unwrap();</span>
     <span class='doccomment'>///</span>
-    <span class='doccomment'>/// bar.set_color(Color::White);  // this won&#39;t work, bar has been moved</span>
+    <span class='doccomment'>/// bar.set_color(Color::White).unwrap();  // this won&#39;t work, bar has been moved</span>
     <span class='doccomment'>/// ```</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>quit</span>(<span class='self'>self</span>) {
+    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>quit</span>(<span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span>(), <span class='ident'>std</span>::<span class='ident'>io</span>::<span class='ident'>Error</span><span class='op'>&gt;</span> {
         <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>message</span>: <span class='ident'>Vec</span><span class='op'>&lt;</span><span class='ident'>u8</span><span class='op'>&gt;</span> <span class='op'>=</span> <span class='ident'>Vec</span>::<span class='ident'>new</span>();
         <span class='ident'>message</span>.<span class='ident'>extend</span>(<span class='string'>&quot;quit&quot;</span>.<span class='ident'>as_bytes</span>()
                              .<span class='ident'>iter</span>());
 
-        <span class='kw'>let</span> <span class='ident'>socket</span> <span class='op'>=</span> <span class='ident'>Anybar</span>::<span class='ident'>socket</span>(<span class='string'>&quot;127.0.0.1&quot;</span>, <span class='number'>0</span>);
+        <span class='kw'>let</span> <span class='ident'>socket</span> <span class='op'>=</span> <span class='kw'>match</span> <span class='ident'>Anybar</span>::<span class='ident'>socket</span>(<span class='string'>&quot;127.0.0.1&quot;</span>, <span class='number'>0</span>) {
+            <span class='prelude-val'>Ok</span>(<span class='ident'>sock</span>) <span class='op'>=&gt;</span> <span class='ident'>sock</span>,
+            <span class='prelude-val'>Err</span>(<span class='ident'>e</span>)   <span class='op'>=&gt;</span> <span class='kw'>return</span> <span class='prelude-val'>Err</span>(<span class='ident'>e</span>)
+        };
+
         <span class='kw'>let</span> _ <span class='op'>=</span> <span class='ident'>socket</span>.<span class='ident'>send_to</span>(<span class='kw-2'>&amp;</span><span class='ident'>message</span>, (<span class='string'>&quot;127.0.0.1&quot;</span>, <span class='self'>self</span>.<span class='ident'>port</span>));
         <span class='ident'>drop</span>(<span class='ident'>socket</span>);
+        <span class='prelude-val'>Ok</span>(())
     }
 }
 
@@ -450,6 +461,8 @@
                     <dd>Move down in search results</dd>
                     <dt>&#9166;</dt>
                     <dd>Go to active search result</dd>
+                    <dt>+</dt>
+                    <dd>Collapse/expand all sections</dd>
                 </dl>
             </div>
 
