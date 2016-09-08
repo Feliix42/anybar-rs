@@ -7,6 +7,6 @@ mod tests {
     #[test]
     fn quit_anybar() {
         let bar = Anybar::new(1708);
-        bar.quit();
+        bar.quit().unwrap();
     }
 }

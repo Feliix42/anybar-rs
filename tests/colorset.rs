@@ -9,6 +9,6 @@ mod colorset {
     fn set_color() {
         let mut anyb = Anybar::default();
 
-        anyb.set_color(Color::White);
+        anyb.set_color(Color::White).unwrap();
     }
 }

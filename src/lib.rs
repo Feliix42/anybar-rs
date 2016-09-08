@@ -10,7 +10,7 @@
 //! let mut bar = Anybar::default();
 //!
 //! // set the color
-//! bar.set_color(Color::Red);
+//! bar.set_color(Color::Red).unwrap();
 //! ```
 //!
 //! ## Using a separate port
@@ -18,7 +18,7 @@
 //! # use anybar::*;
 //! // Anybar::new() takes the Anybar port as parameter
 //! let mut custom_bar = Anybar::new(1708);
-//! custom_bar.set_color(Color::Exclamation);
+//! custom_bar.set_color(Color::Exclamation).unwrap();
 //! ```
 //!
 //! ## Additional information
@@ -29,7 +29,7 @@
 //! // after instantiation, the last color is None
 //! assert!(bar.color.is_none());
 //!
-//! bar.set_color(Color::Red);
+//! bar.set_color(Color::Red).unwrap();
 //! // the last color now contains a value
 //! // assert_eq!(bar.color.unwrap(), Color::Red);
 //! ```
@@ -126,25 +126,31 @@ impl Anybar {
         parsed
     }
 
-    fn socket(ip: &str, port: u16) -> net::UdpSocket {
-        match net::UdpSocket::bind((ip, port)) {
+    fn socket(ip: &str, port: u16) -> Result<net::UdpSocket, std::io::Error> {
+        net::UdpSocket::bind((ip, port))
+        /* match net::UdpSocket::bind((ip, port)) {
             Ok(sock) => sock,
             Err(err) => panic!("Could not bind: {}", err),
-        }
+        } */
     }
 
     /// Set a new color.
     ///
-    /// # Panics
+    /// # Panics - TODO
     /// Panics if the UDP socket can not be bound.
-    pub fn set_color(&mut self, color: Color) {
+    pub fn set_color(&mut self, color: Color) -> Result<(), std::io::Error> {
         let message = Anybar::parse_color(&color);
 
-        let socket = Anybar::socket("127.0.0.1", 0);
+        let socket = match Anybar::socket("127.0.0.1", 0) {
+            Ok(sock) => sock,
+            Err(e)   => return Err(e)
+        };
+
         let _ = socket.send_to(&message, ("127.0.0.1", self.port));
         drop(socket);
 
         self.color = Some(color);
+        Ok(())
     }
 
     /// Sends the quit signal to the Anybar and takes ownership of the object.
@@ -153,7 +159,7 @@ impl Anybar {
     /// execution of this function, it takes the ownership of `self`,
     /// which will be dropped when this function returns.
     ///
-    /// # Panics
+    /// # Panics - TODO
     /// Panics if the UDP socket can not be bound.
     ///
     /// # Example
@@ -163,18 +169,23 @@ impl Anybar {
     ///
     /// // do stuff...
     ///
-    /// bar.quit();
+    /// bar.quit().unwrap();
     ///
-    /// bar.set_color(Color::White);  // this won't work, bar has been moved
+    /// bar.set_color(Color::White).unwrap();  // this won't work, bar has been moved
     /// ```
-    pub fn quit(self) {
+    pub fn quit(self) -> Result<(), std::io::Error> {
         let mut message: Vec<u8> = Vec::new();
         message.extend("quit".as_bytes()
                              .iter());
 
-        let socket = Anybar::socket("127.0.0.1", 0);
+        let socket = match Anybar::socket("127.0.0.1", 0) {
+            Ok(sock) => sock,
+            Err(e)   => return Err(e)
+        };
+
         let _ = socket.send_to(&message, ("127.0.0.1", self.port));
         drop(socket);
+        Ok(())
     }
 }
 
