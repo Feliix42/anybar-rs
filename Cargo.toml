@@ -1,6 +1,6 @@
 [package]
 name = "anybar"
-version = "0.1.2"
+version = "0.1.3"
 authors = ["Felix Wittwer <dev@felixwittwer.de>"]
 
 description = "A Rust crate to interact with Anybar."
