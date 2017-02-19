@@ -102,26 +102,21 @@ impl Anybar {
         }
     }
 
-    fn parse_color(color: &Color) -> Vec<u8> {
+    fn parse_color(color: &Color) -> &'static [u8] {
         use Color::*;
-        let col = match *color {
-            White       => "white",
-            Red         => "red",
-            Orange      => "orange",
-            Yellow      => "yellow",
-            Green       => "green",
-            Cyan        => "cyan",
-            Blue        => "blue",
-            Purple      => "purple",
-            Black       => "black",
-            Question    => "question",
-            Exclamation => "exclamation",
-        };
-
-        let mut parsed: Vec<u8> = Vec::new();
-        parsed.extend(col.as_bytes()
-                         .iter());
-        parsed
+        match *color {
+            White       => b"white",
+            Red         => b"red",
+            Orange      => b"orange",
+            Yellow      => b"yellow",
+            Green       => b"green",
+            Cyan        => b"cyan",
+            Blue        => b"blue",
+            Purple      => b"purple",
+            Black       => b"black",
+            Question    => b"question",
+            Exclamation => b"exclamation",
+        }
     }
 
     fn socket(ip: &str, port: u16) -> Result<net::UdpSocket, std::io::Error> {
@@ -163,13 +158,9 @@ impl Anybar {
     /// bar.set_color(Color::White).unwrap();  // this won't work, bar has been moved
     /// ```
     pub fn quit(self) -> Result<(), std::io::Error> {
-        let mut message: Vec<u8> = Vec::new();
-        message.extend("quit".as_bytes()
-                             .iter());
-
         let socket = try!(Anybar::socket("127.0.0.1", 0));
 
-        let _ = socket.send_to(&message, ("127.0.0.1", self.port));
+        let _ = socket.send_to(b"quit", ("127.0.0.1", self.port));
         drop(socket);
         Ok(())
     }
