@@ -17,7 +17,7 @@
 //! ```
 //! # use anybar::*;
 //! // Anybar::new() takes the Anybar port as parameter
-//! let mut custom_bar = Anybar::new(1708);
+//! let mut custom_bar = Anybar::new(1708).unwrap();
 //! custom_bar.set_color(Color::Exclamation).unwrap();
 //! ```
 //!
