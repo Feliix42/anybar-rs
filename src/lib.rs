@@ -129,7 +129,7 @@ impl Anybar {
     pub fn set_color(&mut self, color: Color) -> Result<(), std::io::Error> {
         let message = Anybar::parse_color(&color);
 
-        Anybar::socket("127.0.0.1", 0)?
+        Self::socket("127.0.0.1", 0)?
             .send_to(&message, ("127.0.0.1", self.port))?;
 
         self.color = Some(color);
@@ -156,7 +156,7 @@ impl Anybar {
     /// bar.set_color(Color::White).unwrap();  // this won't work, bar has been moved
     /// ```
     pub fn quit(self) -> Result<(), std::io::Error> {
-        Anybar::socket("127.0.0.1", 0)?
+        Self::socket("127.0.0.1", 0)?
             .send_to(b"quit", ("127.0.0.1", self.port))?;
         Ok(())
     }
@@ -170,7 +170,7 @@ impl Anybar {
 /// assert_eq!(bar.port, 1738);
 /// ```
 impl Default for Anybar {
-    fn default() -> Anybar {
-        Anybar{port:1738, color:None}
+    fn default() -> Self {
+        Self{port:1738, color:None}
     }
 }
