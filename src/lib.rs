@@ -171,6 +171,6 @@ impl Anybar {
 /// ```
 impl Default for Anybar {
     fn default() -> Self {
-        Self{port:1738, color:None}
+        Anybar{port:1738, color:None}
     }
 }
