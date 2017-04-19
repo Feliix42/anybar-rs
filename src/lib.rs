@@ -17,7 +17,7 @@
 //! ```
 //! # use anybar::*;
 //! // Anybar::new() takes the Anybar port as parameter
-//! let mut custom_bar = Anybar::new(1708);
+//! let mut custom_bar = Anybar::new(1708).unwrap();
 //! custom_bar.set_color(Color::Exclamation).unwrap();
 //! ```
 //!
@@ -86,44 +86,37 @@ impl Anybar {
     ///
     /// `port` may be any port between 0 and 6553.
     ///
-    /// # Panics
-    /// Panics if the port has a non-valid value outside of the range between 0 and 6553.
-    ///
     /// # Examples
     ///
     /// ```
     /// # use anybar::*;
-    /// let custom_bar = Anybar::new(1708);
+    /// let custom_bar = Anybar::new(1708).unwrap();
     ///
     /// assert_eq!(custom_bar.port, 1708);
     /// ```
-    pub fn new(port: u16) -> Anybar {
+    pub fn new(port: u16) -> Result<Anybar, String> {
         if port > 6553 {
-            panic!("The port {} is not between 0 and 6553!", port);
+            Err(format!("The port {} is not between 0 and 6553!", port))
+        } else {
+            Ok(Anybar{port:port, color:None})
         }
-        Anybar{port:port, color:None}
     }
 
-    fn parse_color(color: &Color) -> Vec<u8> {
+    fn parse_color(color: &Color) -> &'static [u8] {
         use Color::*;
-        let col = match *color {
-            White       => "white",
-            Red         => "red",
-            Orange      => "orange",
-            Yellow      => "yellow",
-            Green       => "green",
-            Cyan        => "cyan",
-            Blue        => "blue",
-            Purple      => "purple",
-            Black       => "black",
-            Question    => "question",
-            Exclamation => "exclamation",
-        };
-
-        let mut parsed: Vec<u8> = Vec::new();
-        parsed.extend(col.as_bytes()
-                         .iter());
-        parsed
+        match *color {
+            White       => b"white",
+            Red         => b"red",
+            Orange      => b"orange",
+            Yellow      => b"yellow",
+            Green       => b"green",
+            Cyan        => b"cyan",
+            Blue        => b"blue",
+            Purple      => b"purple",
+            Black       => b"black",
+            Question    => b"question",
+            Exclamation => b"exclamation",
+        }
     }
 
     fn socket(ip: &str, port: u16) -> Result<net::UdpSocket, std::io::Error> {
@@ -136,10 +129,8 @@ impl Anybar {
     pub fn set_color(&mut self, color: Color) -> Result<(), std::io::Error> {
         let message = Anybar::parse_color(&color);
 
-        let socket = try!(Anybar::socket("127.0.0.1", 0));
-
-        let _ = socket.send_to(&message, ("127.0.0.1", self.port));
-        drop(socket);
+        Self::socket("127.0.0.1", 0)?
+            .send_to(&message, ("127.0.0.1", self.port))?;
 
         self.color = Some(color);
         Ok(())
@@ -165,14 +156,8 @@ impl Anybar {
     /// bar.set_color(Color::White).unwrap();  // this won't work, bar has been moved
     /// ```
     pub fn quit(self) -> Result<(), std::io::Error> {
-        let mut message: Vec<u8> = Vec::new();
-        message.extend("quit".as_bytes()
-                             .iter());
-
-        let socket = try!(Anybar::socket("127.0.0.1", 0));
-
-        let _ = socket.send_to(&message, ("127.0.0.1", self.port));
-        drop(socket);
+        Self::socket("127.0.0.1", 0)?
+            .send_to(b"quit", ("127.0.0.1", self.port))?;
         Ok(())
     }
 }
@@ -185,7 +170,7 @@ impl Anybar {
 /// assert_eq!(bar.port, 1738);
 /// ```
 impl Default for Anybar {
-    fn default() -> Anybar {
+    fn default() -> Self {
         Anybar{port:1738, color:None}
     }
 }
